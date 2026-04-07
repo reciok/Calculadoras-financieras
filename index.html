@@ -14,6 +14,11 @@
     <link rel="manifest" href="./manifest.json" />
     <link rel="icon" href="./icons/icon-192.svg" type="image/svg+xml" />
     <title>Zyvola Finanzas</title>
+    <script>
+      if (window.location.protocol === "file:") {
+        window.location.replace("./dist/index.html");
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
