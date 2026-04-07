@@ -1,5 +1,6 @@
 const CACHE_NAME = "zyvola-finanzas-v1";
-const OFFLINE_ASSETS = ["/", "/index.html", "/manifest.json"];
+const BASE_URL = self.registration.scope;
+const OFFLINE_ASSETS = [BASE_URL, `${BASE_URL}index.html`, `${BASE_URL}manifest.json`];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(OFFLINE_ASSETS)));
@@ -32,7 +33,8 @@ self.addEventListener("fetch", (event) => {
           caches.open(CACHE_NAME).then((cache) => cache.put(event.request, cloned));
           return response;
         })
-        .catch(() => caches.match("/index.html"));
+        .catch(() => caches.match(`${BASE_URL}index.html`));
     })
   );
 });
+
