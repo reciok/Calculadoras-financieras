@@ -4,9 +4,9 @@ import { HashRouter } from "react-router-dom";
 import App from "./App";
 import "./styles/global.css";
 
-if ("serviceWorker" in navigator) {
+if (window.location.protocol !== "file:" && "serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`).catch(() => {});
+    navigator.serviceWorker.register("./sw.js").catch(() => {});
   });
 }
 
