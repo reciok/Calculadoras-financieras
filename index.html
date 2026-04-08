@@ -1,34 +1,219 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#000000" />
-    <meta name="description" content="Plataforma financiera educativa con calculadoras, guías, glosario y economía explicada fácil." />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
-      rel="stylesheet"
-    />
-    <meta http-equiv="refresh" content="0; url=./dist/index.html" />
-    <link rel="manifest" href="./manifest.json" />
-    <link rel="icon" href="./icons/icon-192.svg" type="image/svg+xml" />
-    <title>Zyvola Finanzas</title>
-    <script>
-      const isLocalhost = ["localhost", "127.0.0.1"].includes(window.location.hostname);
-      if (window.location.protocol === "file:" || !isLocalhost) {
-        window.location.replace("./dist/index.html");
-      }
-    </script>
-  </head>
-  <body>
-    <main style="font-family: Manrope, sans-serif; padding: 2rem; color: #161616;">
-      <p>Redirigiendo a Zyvola Finanzas...</p>
-      <p>
-        Si no cambia automáticamente, abre
-        <a href="./dist/index.html"> ./dist/index.html</a>.
-      </p>
+<head>
+        <!-- SEO: codificación explícita para indexación correcta -->
+    <meta charset="UTF-8">
+        <!-- SEO: viewport para mobile-first rendering -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- SEO: descripción única y orientada a intención de búsqueda -->
+        <meta name="description" content="Calculadoras financieras premium de Zyvola: inversión, ahorro, préstamos, impuestos e inmuebles con resultados dinámicos.">
+        <!-- SEO: permite indexación y seguimiento -->
+        <meta name="robots" content="index,follow,max-image-preview:large">
+    <meta name="theme-color" content="#1a1a1a">
+    <!-- SEO/PWA técnico: manifiesto de aplicación web -->
+    <link rel="manifest" href="manifest.json">
+        <!-- SEO: title optimizado con marca + keyword principal -->
+        <title>Calculadoras Financieras Premium | Zyvola</title>
+        <!-- SEO: URL canónica para evitar contenido duplicado -->
+        <link rel="canonical" href="https://calculadorasfinancierasonline.com/">
+
+        <!-- SEO social: Open Graph -->
+        <meta property="og:type" content="website">
+        <meta property="og:locale" content="es_ES">
+        <meta property="og:site_name" content="Zyvola">
+        <meta property="og:title" content="Calculadoras Financieras Premium | Zyvola">
+        <meta property="og:description" content="Herramientas financieras profesionales para inversión, ahorro, préstamos e impuestos.">
+        <meta property="og:url" content="https://calculadorasfinancierasonline.com/">
+        <meta property="og:image" content="assets/zyvola-logo.png">
+
+        <!-- SEO social: Twitter Cards -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="Calculadoras Financieras Premium | Zyvola">
+        <meta name="twitter:description" content="Herramientas financieras profesionales para inversión, ahorro, préstamos e impuestos.">
+        <meta name="twitter:image" content="assets/zyvola-logo.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+
+        <!-- SEO estructurado: entidad Organization + WebSite -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@graph": [
+                {
+                    "@type": "Organization",
+                    "name": "Zyvola",
+                    "url": "https://calculadorasfinancierasonline.com/",
+                    "logo": "assets/zyvola-logo.png"
+                },
+                {
+                    "@type": "WebSite",
+                    "name": "Zyvola",
+                    "url": "https://calculadorasfinancierasonline.com/",
+                    "inLanguage": "es"
+                }
+            ]
+        }
+        </script>
+</head>
+<body>
+    <!-- ═══════════════════════════════════════════════════════════════
+         NAVBAR PREMIUM
+         ═══════════════════════════════════════════════════════════════ -->
+    <nav class="navbar" aria-label="Navegación principal">
+        <div class="navbar-container">
+            <div class="navbar-logo">
+                <span class="logo-mark-wrap">
+                    <img src="assets/zyvola-logo.png" alt="Logotipo de Zyvola" class="logo-mark" decoding="async" fetchpriority="high">
+                </span>
+                <span class="logo-text">Zyvola</span>
+            </div>
+            <ul class="navbar-menu">
+                <li><a href="#calculadoras" class="nav-link">Calculadoras</a></li>
+                <li><a href="#features" class="nav-link">Características</a></li>
+                <li><a href="#contacto" class="nav-link">Contacto</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         HERO SECTION
+         ═══════════════════════════════════════════════════════════════ -->
+    <header class="hero" role="banner">
+        <div class="hero-content">
+            <h1 class="hero-title">Calculadoras Financieras Online</h1>
+            <p class="hero-subtitle">
+                Herramientas profesionales para optimizar tus decisiones de inversión
+            </p>
+            <a href="#calculadoras" class="cta-button">Explorar Herramientas</a>
+        </div>
+        <div class="hero-decorative"></div>
+    </header>
+
+    <main id="main-content">
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SECCIÓN CALCULADORAS
+         ═══════════════════════════════════════════════════════════════ -->
+    <section id="calculadoras" class="calculadoras-section" aria-labelledby="calculadoras-title">
+        <div class="container">
+            <h2 id="calculadoras-title" class="section-title">Calculadoras Financieras</h2>
+            <p class="section-subtitle">Más de 50 herramientas para optimizar tus decisiones financieras</p>
+
+            <!-- FILTRO DE CATEGORÍAS -->
+            <div class="filter-section" aria-label="Filtro de categorías de calculadoras">
+                <button class="filter-btn active" data-filter="all" type="button" aria-label="Mostrar todas las calculadoras">Todas</button>
+                <button class="filter-btn" data-filter="investment" type="button" aria-label="Filtrar por inversión">Inversión</button>
+                <button class="filter-btn" data-filter="savings" type="button" aria-label="Filtrar por ahorros">Ahorros</button>
+                <button class="filter-btn" data-filter="loans" type="button" aria-label="Filtrar por préstamos">Préstamos</button>
+                <button class="filter-btn" data-filter="real-estate" type="button" aria-label="Filtrar por inmuebles">Inmuebles</button>
+                <button class="filter-btn" data-filter="taxes" type="button" aria-label="Filtrar por impuestos">Impuestos</button>
+            </div>
+
+            <!-- GRID DE CALCULADORAS (Se genera dinámicamente) -->
+            <div id="calculatorsGrid" class="cards-grid" aria-live="polite"></div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         CARACTERÍSTICAS
+         ═══════════════════════════════════════════════════════════════ -->
+    <section id="features" class="features-section" aria-labelledby="features-title">
+        <div class="container">
+            <h2 id="features-title" class="section-title">¿Por qué Zyvola?</h2>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-number">01</div>
+                    <h3 class="feature-title">100% Precisión</h3>
+                    <p class="feature-text">Algoritmos financieros verificados y actualizados constantemente</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-number">02</div>
+                    <h3 class="feature-title">Interfaz Intuitiva</h3>
+                    <p class="feature-text">Diseño minimalista que facilita el uso incluso para principiantes</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-number">03</div>
+                    <h3 class="feature-title">Soporte 24/7</h3>
+                    <p class="feature-text">Equipo experto disponible para resolver tus dudas en cualquier momento</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-number">04</div>
+                    <h3 class="feature-title">Datos Actualizados</h3>
+                    <p class="feature-text">Información de mercado en tiempo real integrada en nuestras herramientas</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-number">05</div>
+                    <h3 class="feature-title">Totalmente Gratuito</h3>
+                    <p class="feature-text">Sin suscripciones ocultas, sin pagos recurrentes, completamente libre</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-number">06</div>
+                    <h3 class="feature-title">Privacidad Garantizada</h3>
+                    <p class="feature-text">Tus datos son privados, encriptados y nunca se comparten con terceros</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         MODAL CALCULADORA
+         ═══════════════════════════════════════════════════════════════ -->
+    <div id="calculatorModal" class="modal" role="dialog" aria-modal="true" aria-label="Calculadora financiera">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeCalculator()" aria-label="Cerrar calculadora">✕</button>
+            
+            <div id="calculatorBody">
+                <!-- Contenido dinámico -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         FOOTER
+         ═══════════════════════════════════════════════════════════════ -->
+    <footer class="footer" id="contacto">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4 class="footer-title">Zyvola</h4>
+                    <p class="footer-text">Plataforma de educación financiera y herramientas de inversión profesionales</p>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-title">Enlaces Rápidos</h4>
+                    <ul class="footer-links">
+                        <li><a href="#calculadoras">Calculadoras</a></li>
+                        <li><a href="#features">Características</a></li>
+                        <li><a href="#contacto">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-title">Legal</h4>
+                    <ul class="footer-links">
+                        <li><a href="politica-privacidad.html">Privacidad</a></li>
+                        <li><a href="aviso-legal.html">Términos de Uso</a></li>
+                        <li><a href="politica-cookies.html">Cookies</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Zyvola. Todos los derechos reservados. | Hecho con ❤️ para inversores</p>
+            </div>
+        </div>
+    </footer>
+
     </main>
-  </body>
+
+    <!-- Rendimiento: carga diferida sin bloquear render inicial -->
+    <script src="cookie-consent.js" defer></script>
+    <script src="app.js" defer></script>
+</body>
 </html>

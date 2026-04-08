@@ -1,0 +1,6 @@
+# robots.txt - Configuracion de rastreo para motores de busqueda
+User-agent: *
+Allow: /
+
+# Sitemap para descubrimiento de URLs
+Sitemap: https://calculadorasfinancierasonline.com/sitemap.xml
