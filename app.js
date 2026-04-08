@@ -1574,7 +1574,7 @@ function renderCalculatorPage(calc, hostEl) {
                 ${inputsHtml}
                 <div class="button-group">
                     <button type="submit" class="btn-primary">Calcular</button>
-                    <a href="${buildUrl('calculadoras/')}" class="btn-secondary calculator-back-link">Volver</a>
+                    <a href="${buildUrl('calculadoras/index.html')}" class="btn-secondary calculator-back-link">Volver</a>
                 </div>
             </form>
             <div id="calc-result-area"></div>
