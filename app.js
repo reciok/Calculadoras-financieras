@@ -26,6 +26,14 @@ const CATEGORY_LABELS = {
     taxes: 'Impuestos',
 };
 
+function getBasePrefix() {
+    return window.location.pathname.includes('/calculadoras/') ? '../' : '';
+}
+
+function buildUrl(path) {
+    return `${getBasePrefix()}${path}`;
+}
+
 async function clearLegacyOfflineCaches() {
     if (!('serviceWorker' in navigator)) return;
 
@@ -1526,7 +1534,7 @@ function attachRealtime(calcId) {
 function openCalculator(id) {
     const calc = getCalculatorById(id);
     if (!calc) return;
-    window.location.href = `calculator.html?calc=${encodeURIComponent(calc.id)}`;
+    window.location.href = buildUrl(`calculator.html?calc=${encodeURIComponent(calc.id)}`);
 }
 
 function close_modal() {
@@ -1573,14 +1581,123 @@ function renderCalculatorPage(calc, hostEl) {
                 ${inputsHtml}
                 <div class="button-group">
                     <button type="submit" class="btn-primary">Calcular</button>
-                    <a href="index.html#calculadoras" class="btn-secondary calculator-back-link">Volver</a>
+                    <a href="${buildUrl('calculadoras/')}" class="btn-secondary calculator-back-link">Volver</a>
                 </div>
             </form>
             <div id="calc-result-area"></div>
+            <section class="calculator-seo-content" id="calculatorSeoContent" aria-label="Contenido explicativo de la calculadora"></section>
         </div>
     `;
 
+    const seoHost = hostEl.querySelector('#calculatorSeoContent');
+    if (seoHost) {
+        seoHost.innerHTML = renderCalculatorSeoContent(calc);
+    }
+
     attachRealtime(calc.id);
+}
+
+function calcInputSummary(calc) {
+    return calc.inputs.map((input) => input.l).join(', ');
+}
+
+function calcFormulaText(calc) {
+    const target = calc.outputs?.[0]?.l || 'Resultado principal';
+    const vars = calc.inputs.map((input) => input.n).join(', ');
+    return `${target} = f(${vars})`;
+}
+
+function calcExampleText(calc) {
+    const defaultInput = {};
+    calc.inputs.forEach((input) => {
+        defaultInput[input.n] = input.d;
+    });
+
+    try {
+        const result = calc.calculate(defaultInput);
+        const firstOutput = calc.outputs?.[0];
+        if (!firstOutput) return 'Introduce tus propios datos para obtener una simulación personalizada.';
+        const value = result?.values?.[firstOutput.n];
+        return `Ejemplo rápido: usando los valores por defecto de la calculadora, el resultado estimado en "${firstOutput.l}" es ${formatValue(value, firstOutput.f)}.`;
+    } catch (error) {
+        return 'Introduce tus propios datos para obtener una simulación personalizada.';
+    }
+}
+
+function categoryUseText(category) {
+    if (category === 'investment') return 'Sirve para proyectar escenarios de inversión y comparar rentabilidad esperada frente a riesgo y horizonte temporal.';
+    if (category === 'savings') return 'Sirve para planificar metas de ahorro con aportaciones periódicas y horizontes definidos.';
+    if (category === 'loans') return 'Sirve para evaluar cuotas, coste financiero total y decisiones de financiación con mayor precisión.';
+    if (category === 'real-estate') return 'Sirve para analizar operaciones inmobiliarias, flujo de caja y rentabilidad del activo.';
+    return 'Sirve para estimar el impacto fiscal y tomar decisiones con una visión neta de impuestos.';
+}
+
+function renderCalculatorSeoContent(calc) {
+    const inputSummary = calcInputSummary(calc);
+    const formula = calcFormulaText(calc);
+    const example = calcExampleText(calc);
+    const categoryLabel = CATEGORY_LABELS[calc.category] || 'Finanzas';
+    const useText = categoryUseText(calc.category);
+
+    return `
+        <article class="result-box" style="text-align:left; margin-top:1.5rem;">
+            <h2 class="calculator-title" style="margin-bottom:0.5rem; font-size:1.45rem;">Qué Calcula ${calc.name}</h2>
+            <p>${calc.desc} Esta herramienta utiliza las variables: ${inputSummary}.</p>
+        </article>
+
+        <article class="result-box" style="text-align:left;">
+            <h3 class="result-label" style="font-size:1rem; color:#f0d895;">Para Qué Sirve</h3>
+            <p>${useText}</p>
+            <p>Se recomienda para usuarios interesados en ${categoryLabel.toLowerCase()} que necesitan decisiones cuantificables y comparables.</p>
+        </article>
+
+        <article class="result-box" style="text-align:left;">
+            <h3 class="result-label" style="font-size:1rem; color:#f0d895;">Fórmula Usada</h3>
+            <p>${formula}</p>
+            <p>La implementación aplica validaciones numéricas y límites de entrada para ofrecer resultados consistentes.</p>
+        </article>
+
+        <article class="result-box" style="text-align:left;">
+            <h3 class="result-label" style="font-size:1rem; color:#f0d895;">Ejemplo Práctico</h3>
+            <p>${example}</p>
+        </article>
+
+        <article class="result-box" style="text-align:left;">
+            <h3 class="result-label" style="font-size:1rem; color:#f0d895;">Preguntas Frecuentes</h3>
+            <details style="margin-bottom:0.6rem;">
+                <summary>¿Qué datos debo introducir para ${calc.name}?</summary>
+                <p style="margin-top:0.4rem;">Debes completar los campos visibles en el formulario. Los resultados se actualizan automáticamente al cambiar los valores.</p>
+            </details>
+            <details style="margin-bottom:0.6rem;">
+                <summary>¿Los resultados son orientativos o definitivos?</summary>
+                <p style="margin-top:0.4rem;">Los cálculos son precisos para simulación financiera, pero conviene contrastarlos con condiciones reales de mercado, comisiones o fiscalidad concreta.</p>
+            </details>
+            <details>
+                <summary>¿Puedo comparar escenarios?</summary>
+                <p style="margin-top:0.4rem;">Sí. Modifica uno o varios campos y revisa cómo cambia el resultado para tomar una mejor decisión.</p>
+            </details>
+        </article>
+    `;
+}
+
+function renderCalculadorasListingPage() {
+    const listingGrid = document.getElementById('calculadorasListingGrid');
+    if (!listingGrid) return false;
+
+    const sorted = [...CALCULATORS_DB].sort((a, b) => (a.order || 999) - (b.order || 999));
+    listingGrid.innerHTML = sorted
+        .map((calc) => `
+            <article class="premium-card premium-card--${calc.category}" data-calc="${calc.id}">
+                <div class="card-content">
+                    <h2 class="card-title">${calc.name}</h2>
+                    <p class="card-description">${calc.desc}</p>
+                    <a class="btn-secondary calculator-back-link" href="${buildUrl(`calculator.html?calc=${encodeURIComponent(calc.id)}`)}">Abrir calculadora</a>
+                </div>
+            </article>
+        `)
+        .join('');
+
+    return true;
 }
 
 function initCalculatorStandalonePage() {
@@ -1642,6 +1759,12 @@ document.addEventListener('keydown', (event) => {
 document.addEventListener('DOMContentLoaded', () => {
     clearLegacyOfflineCaches();
     const standaloneLoaded = initCalculatorStandalonePage();
-    if (!standaloneLoaded) init();
+    if (standaloneLoaded) {
+        console.log(`Zyvola lista con ${CALCULATORS_DB.length} calculadoras inteligentes.`);
+        return;
+    }
+
+    const listingLoaded = renderCalculadorasListingPage();
+    if (!listingLoaded) init();
     console.log(`Zyvola lista con ${CALCULATORS_DB.length} calculadoras inteligentes.`);
 });

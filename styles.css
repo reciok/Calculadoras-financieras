@@ -828,6 +828,16 @@ body {
     text-decoration: none;
 }
 
+.calculator-seo-content details summary {
+    cursor: pointer;
+    color: #efda9f;
+    font-weight: 600;
+}
+
+.calculator-seo-content details p {
+    color: #cdcdcd;
+}
+
 .modal-close {
     position: absolute;
     top: 1rem;

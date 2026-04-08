@@ -33,6 +33,7 @@ jobs:
           mkdir -p _site
           cp -r index.html calculator.html app.js styles.css manifest.json robots.txt sitemap.xml cookie-consent.js sw.js service-worker.js CNAME _site/
           cp -r assets _site/assets
+          cp -r calculadoras _site/calculadoras
           cp -r aviso-legal.html politica-privacidad.html politica-cookies.html _site/
 
       - name: Upload artifact
