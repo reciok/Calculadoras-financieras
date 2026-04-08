@@ -26,6 +26,26 @@ const CATEGORY_LABELS = {
     taxes: 'Impuestos',
 };
 
+async function clearLegacyOfflineCaches() {
+    if (!('serviceWorker' in navigator)) return;
+
+    try {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(registrations.map((registration) => registration.unregister()));
+    } catch (error) {
+        console.warn('No se pudieron desregistrar service workers antiguos:', error);
+    }
+
+    if ('caches' in window) {
+        try {
+            const names = await caches.keys();
+            await Promise.all(names.map((name) => caches.delete(name)));
+        } catch (error) {
+            console.warn('No se pudo limpiar la caché del navegador:', error);
+        }
+    }
+}
+
 const FinanceMath = {
     safeNumber(value, fallback = 0) {
         const n = typeof value === 'number' ? value : parseFloat(value);
@@ -1620,6 +1640,7 @@ document.addEventListener('keydown', (event) => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
+    clearLegacyOfflineCaches();
     const standaloneLoaded = initCalculatorStandalonePage();
     if (!standaloneLoaded) init();
     console.log(`Zyvola lista con ${CALCULATORS_DB.length} calculadoras inteligentes.`);
