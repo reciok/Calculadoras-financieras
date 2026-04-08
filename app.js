@@ -34,24 +34,17 @@ function buildUrl(path) {
     return `${getBasePrefix()}${path}`;
 }
 
-async function clearLegacyOfflineCaches() {
+function registerPwaServiceWorker() {
     if (!('serviceWorker' in navigator)) return;
+    if (!window.isSecureContext && window.location.hostname !== 'localhost') return;
 
-    try {
-        const registrations = await navigator.serviceWorker.getRegistrations();
-        await Promise.all(registrations.map((registration) => registration.unregister()));
-    } catch (error) {
-        console.warn('No se pudieron desregistrar service workers antiguos:', error);
-    }
-
-    if ('caches' in window) {
+    window.addEventListener('load', async () => {
         try {
-            const names = await caches.keys();
-            await Promise.all(names.map((name) => caches.delete(name)));
+            await navigator.serviceWorker.register('/sw.js', { scope: '/' });
         } catch (error) {
-            console.warn('No se pudo limpiar la caché del navegador:', error);
+            console.warn('No se pudo registrar el service worker:', error);
         }
-    }
+    });
 }
 
 const FinanceMath = {
@@ -1757,7 +1750,7 @@ document.addEventListener('keydown', (event) => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    clearLegacyOfflineCaches();
+    registerPwaServiceWorker();
     const standaloneLoaded = initCalculatorStandalonePage();
     if (standaloneLoaded) {
         console.log(`Zyvola lista con ${CALCULATORS_DB.length} calculadoras inteligentes.`);

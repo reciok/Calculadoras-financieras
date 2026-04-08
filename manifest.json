@@ -1,18 +1,27 @@
 {
+  "id": "/",
   "name": "Zyvola Calculadoras Financieras",
   "short_name": "Zyvola",
   "start_url": "/",
+  "orientation": "portrait",
   "scope": "/",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
   "background_color": "#1a1a1a",
   "theme_color": "#1a1a1a",
   "description": "Calculadoras financieras premium de Zyvola.",
   "icons": [
     {
       "src": "assets/zyvola-logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/zyvola-logo.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     }
   ]
 }
