@@ -10,6 +10,7 @@ const PRECACHE_URLS = [
     '/styles.css',
     '/manifest.json',
     '/cookie-consent.js',
+    '/logo.png',
     '/assets/zyvola-logo.png',
     OFFLINE_PAGE,
 ];

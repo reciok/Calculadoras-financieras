@@ -31,7 +31,7 @@ jobs:
       - name: Prepare artifact
         run: |
           mkdir -p _site
-          cp -r index.html calculator.html app.js styles.css manifest.json robots.txt sitemap.xml cookie-consent.js sw.js service-worker.js offline.html CNAME _site/
+          cp -r index.html calculator.html app.js styles.css manifest.json robots.txt sitemap.xml cookie-consent.js sw.js service-worker.js offline.html logo.png CNAME _site/
           cp -r assets _site/assets
           cp -r calculadoras _site/calculadoras
           cp -r aviso-legal.html politica-privacidad.html politica-cookies.html _site/
