@@ -77,18 +77,22 @@
                 <div class="calculator-page-head">
                     <h1 id="calculadoras-list-title" class="calculator-title">Todas Las Calculadoras Financieras</h1>
                     <p class="calculator-page-subtitle">
-                        Esta sección agrupa el catálogo completo de herramientas financieras de Zyvola. Puedes entrar a cada calculadora individual,
-                        completar tus datos y obtener resultados con interpretación inmediata para inversión, ahorro, préstamos, inmuebles e impuestos.
+                        Este directorio centraliza el catálogo completo de herramientas financieras de Zyvola para que puedas encontrar cada calculadora con menos scroll y navegación más clara.
                     </p>
                 </div>
 
-                <div id="calculadorasListingIntro" class="result-box" style="text-align:left;">
-                    <div class="result-label">Qué encontrarás aquí</div>
-                    <p>
-                        Encontrarás calculadoras para planificar objetivos de ahorro, proyectar crecimiento de inversiones, estimar cuotas y amortizaciones,
-                        comparar escenarios hipotecarios y calcular métricas clave de rentabilidad y fiscalidad. El objetivo es que tomes decisiones financieras
-                        con criterios cuantitativos y trazables.
-                    </p>
+                <!-- HUB principal: buscador + categorías + grid consistente -->
+                <div class="hub-toolbar" aria-label="Herramientas de navegación del catálogo">
+                    <div class="hub-search-wrap">
+                        <label for="calculadorasSearch" class="form-label">Buscar calculadora</label>
+                        <input id="calculadorasSearch" class="form-input" type="search" placeholder="Ej. interés compuesto, hipoteca, IRPF" autocomplete="off">
+                    </div>
+
+                    <div id="calculadorasCategoryTabs" class="filter-section" aria-label="Filtro de categorías"></div>
+
+                    <div class="hub-summary">
+                        <p id="calculadorasResultsSummary" class="hub-results-summary">Cargando calculadoras...</p>
+                    </div>
                 </div>
 
                 <section id="calculadorasListingGrid" class="cards-grid" aria-label="Listado de calculadoras"></section>

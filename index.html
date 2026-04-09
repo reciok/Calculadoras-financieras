@@ -107,20 +107,28 @@
     <section id="calculadoras" class="calculadoras-section" aria-labelledby="calculadoras-title">
         <div class="container">
             <h2 id="calculadoras-title" class="section-title">Calculadoras Financieras</h2>
-            <p class="section-subtitle">Más de 50 herramientas para optimizar tus decisiones financieras</p>
+            <p class="section-subtitle">Empieza por una selección breve y accede al directorio completo solo cuando lo necesites.</p>
 
-            <!-- FILTRO DE CATEGORÍAS -->
-            <div class="filter-section" aria-label="Filtro de categorías de calculadoras">
-                <button class="filter-btn active" data-filter="all" type="button" aria-label="Mostrar todas las calculadoras">Todas</button>
-                <button class="filter-btn" data-filter="investment" type="button" aria-label="Filtrar por inversión">Inversión</button>
-                <button class="filter-btn" data-filter="savings" type="button" aria-label="Filtrar por ahorros">Ahorros</button>
-                <button class="filter-btn" data-filter="loans" type="button" aria-label="Filtrar por préstamos">Préstamos</button>
-                <button class="filter-btn" data-filter="real-estate" type="button" aria-label="Filtrar por inmuebles">Inmuebles</button>
-                <button class="filter-btn" data-filter="taxes" type="button" aria-label="Filtrar por impuestos">Impuestos</button>
+            <!-- Home: muestra solo una selección reducida para evitar scroll infinito -->
+            <div class="home-showcase-shell">
+                <div class="home-showcase-head">
+                    <h3 class="feature-title">Calculadoras destacadas</h3>
+                    <p class="feature-text">Una vista rápida con las herramientas más representativas de cada categoría.</p>
+                </div>
+                <div id="homeFeaturedGrid" class="cards-grid" aria-live="polite"></div>
             </div>
 
-            <!-- GRID DE CALCULADORAS (Se genera dinámicamente) -->
-            <div id="calculatorsGrid" class="cards-grid" aria-live="polite"></div>
+            <div class="home-showcase-shell">
+                <div class="home-showcase-head">
+                    <h3 id="home-categories-title" class="feature-title">Explora por categoría</h3>
+                    <p class="feature-text">Accede al HUB principal para ver el catálogo completo, buscar y filtrar con más precisión.</p>
+                </div>
+                <div id="homeCategoriesPreview" class="category-preview-grid" aria-labelledby="home-categories-title"></div>
+            </div>
+
+            <div class="button-group home-showcase-actions">
+                <a href="calculadoras/index.html" class="btn-primary calculator-back-link">Ver todas las calculadoras</a>
+            </div>
         </div>
     </section>
 

@@ -26,6 +26,14 @@ const CATEGORY_LABELS = {
     taxes: 'Impuestos',
 };
 
+const CATEGORY_DESCRIPTIONS = {
+    investment: 'Proyecciones de rentabilidad, inflación, carteras y métricas de inversión.',
+    savings: 'Metas de ahorro, aportaciones periódicas y planificación financiera personal.',
+    loans: 'Préstamos, hipotecas, amortizaciones y comparativas de financiación.',
+    'real-estate': 'Análisis de rentabilidad inmobiliaria, cashflow y compra frente a alquiler.',
+    taxes: 'Estimaciones fiscales rápidas para inversiones, dividendos y plusvalías.',
+};
+
 function getBasePrefix() {
     return window.location.pathname.includes('/calculadoras/') ? '../' : '';
 }
@@ -1362,6 +1370,37 @@ function getCalculatorById(id) {
     return CALCULATORS_DB.find((c) => c.id === id);
 }
 
+function getSortedCalculators() {
+    return [...CALCULATORS_DB].sort((a, b) => (a.order || 999) - (b.order || 999));
+}
+
+function getFeaturedCalculators() {
+    // La home prioriza herramientas de uso más transversal y frecuente para un acceso rápido.
+    const featuredIds = [
+        'compound-interest',
+        'monthly-contribution-needed',
+        'fixed-mortgage',
+        'buy-vs-rent',
+        'irpf-investments',
+    ];
+
+    const featured = featuredIds
+        .map((id) => getCalculatorById(id))
+        .filter(Boolean);
+
+    if (featured.length >= 5) return featured;
+
+    const fallback = getSortedCalculators().filter((calc) => !featuredIds.includes(calc.id));
+    return [...featured, ...fallback].slice(0, 5);
+}
+
+function getCategoryCounts() {
+    return CALCULATORS_DB.reduce((acc, calc) => {
+        acc[calc.category] = (acc[calc.category] || 0) + 1;
+        return acc;
+    }, {});
+}
+
 function formatValue(value, format) {
     const num = FinanceMath.safeNumber(value, 0);
     if (format === 'currency') return CURRENCY.format(num);
@@ -1547,21 +1586,6 @@ function handleCardKeydown(event, id) {
     }
 }
 
-function setupFilters() {
-    document.querySelectorAll('.filter-btn').forEach((btn) => {
-        btn.onclick = () => {
-            document.querySelectorAll('.filter-btn').forEach((b) => b.classList.remove('active'));
-            btn.classList.add('active');
-            const category = btn.dataset.filter;
-            document.querySelectorAll('[data-calc]').forEach((card) => {
-                const calc = CALCULATORS_DB.find((c) => c.id === card.dataset.calc);
-                const show = category === 'all' || calc.category === category;
-                card.style.display = show ? 'block' : 'none';
-            });
-        };
-    });
-}
-
 function renderCalculatorPage(calc, hostEl) {
     const inputsHtml = calc.inputs.map(renderInput).join('');
     hostEl.innerHTML = `
@@ -1674,21 +1698,82 @@ function renderCalculatorSeoContent(calc) {
 }
 
 function renderCalculadorasListingPage() {
+    const listingTabs = document.getElementById('calculadorasCategoryTabs');
     const listingGrid = document.getElementById('calculadorasListingGrid');
-    if (!listingGrid) return false;
+    const searchInput = document.getElementById('calculadorasSearch');
+    const resultsSummary = document.getElementById('calculadorasResultsSummary');
+    if (!listingGrid || !listingTabs || !searchInput || !resultsSummary) return false;
 
-    const sorted = [...CALCULATORS_DB].sort((a, b) => (a.order || 999) - (b.order || 999));
-    listingGrid.innerHTML = sorted
-        .map((calc) => `
-            <article class="premium-card premium-card--${calc.category}" data-calc="${calc.id}">
-                <div class="card-content">
-                    <h2 class="card-title">${calc.name}</h2>
-                    <p class="card-description">${calc.desc}</p>
-                    <a class="btn-secondary calculator-back-link" href="${buildUrl(`calculator.html?calc=${encodeURIComponent(calc.id)}`)}">Abrir calculadora</a>
-                </div>
-            </article>
-        `)
-        .join('');
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialCategory = urlParams.get('category') || 'all';
+    const initialSearch = urlParams.get('q') || '';
+    const state = {
+        category: CATEGORY_LABELS[initialCategory] ? initialCategory : 'all',
+        search: initialSearch.trim().toLowerCase(),
+    };
+
+    searchInput.value = initialSearch;
+
+    const renderTabs = () => {
+        const tabs = [
+            { key: 'all', label: 'Todas' },
+            ...Object.entries(CATEGORY_LABELS).map(([key, label]) => ({ key, label })),
+        ];
+
+        listingTabs.innerHTML = tabs
+            .map((tab) => `<button class="filter-btn ${state.category === tab.key ? 'active' : ''}" data-filter="${tab.key}" type="button">${tab.label}</button>`)
+            .join('');
+
+        listingTabs.querySelectorAll('.filter-btn').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                state.category = btn.dataset.filter || 'all';
+                renderTabs();
+                renderResults();
+            });
+        });
+    };
+
+    const renderResults = () => {
+        const filtered = getSortedCalculators().filter((calc) => {
+            const matchesCategory = state.category === 'all' || calc.category === state.category;
+            const haystack = `${calc.name} ${calc.desc} ${CATEGORY_LABELS[calc.category] || ''}`.toLowerCase();
+            const matchesSearch = !state.search || haystack.includes(state.search);
+            return matchesCategory && matchesSearch;
+        });
+
+        resultsSummary.textContent = `${filtered.length} calculadoras ${state.category === 'all' ? 'disponibles en el catálogo' : `en ${CATEGORY_LABELS[state.category]}`}${state.search ? ` para "${searchInput.value.trim()}"` : ''}.`;
+
+        if (!filtered.length) {
+            listingGrid.innerHTML = `
+                <article class="result-box hub-empty-state" style="text-align:left;">
+                    <div class="result-label">Sin resultados</div>
+                    <p>No hay calculadoras que coincidan con tu búsqueda actual. Prueba con otra categoría o un término más amplio.</p>
+                </article>
+            `;
+            return;
+        }
+
+        listingGrid.innerHTML = filtered
+            .map((calc) => `
+                <article class="premium-card premium-card--${calc.category}" data-calc="${calc.id}">
+                    <div class="card-content">
+                        <div class="hub-card-meta result-label">${CATEGORY_LABELS[calc.category] || 'Finanzas'}</div>
+                        <h2 class="card-title">${calc.name}</h2>
+                        <p class="card-description">${calc.desc}</p>
+                        <a class="btn-secondary calculator-back-link" href="${buildUrl(`calculator.html?calc=${encodeURIComponent(calc.id)}`)}">Abrir calculadora</a>
+                    </div>
+                </article>
+            `)
+            .join('');
+    };
+
+    searchInput.addEventListener('input', () => {
+        state.search = searchInput.value.trim().toLowerCase();
+        renderResults();
+    });
+
+    renderTabs();
+    renderResults();
 
     return true;
 }
@@ -1729,14 +1814,30 @@ function renderCard(calc) {
     </article>`;
 }
 
-function init() {
-    const grid = document.getElementById('calculatorsGrid');
-    if (!grid) return;
+function renderHomeCategoryPreview() {
+    const host = document.getElementById('homeCategoriesPreview');
+    if (!host) return;
 
-    const sorted = [...CALCULATORS_DB].sort((a, b) => (a.order || 999) - (b.order || 999));
-    grid.innerHTML = sorted.map(renderCard).join('');
+    const counts = getCategoryCounts();
+    host.innerHTML = Object.entries(CATEGORY_LABELS)
+        .map(([key, label]) => `
+            <article class="result-box category-preview-card">
+                <div class="result-label">${counts[key] || 0} calculadoras</div>
+                <div class="result-value category-preview-title">${label}</div>
+                <p class="category-preview-text">${CATEGORY_DESCRIPTIONS[key]}</p>
+                <a class="btn-secondary calculator-back-link" href="calculadoras/index.html?category=${encodeURIComponent(key)}">Ver categoría</a>
+            </article>
+        `)
+        .join('');
+}
 
-    setupFilters();
+function renderHomeShowcase() {
+    const grid = document.getElementById('homeFeaturedGrid');
+    if (!grid) return false;
+
+    grid.innerHTML = getFeaturedCalculators().map(renderCard).join('');
+    renderHomeCategoryPreview();
+    return true;
 }
 
 if (modal) {
@@ -1758,6 +1859,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const listingLoaded = renderCalculadorasListingPage();
-    if (!listingLoaded) init();
+    if (!listingLoaded) renderHomeShowcase();
     console.log(`Zyvola lista con ${CALCULATORS_DB.length} calculadoras inteligentes.`);
 });
