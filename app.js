@@ -34,6 +34,9 @@ const CATEGORY_DESCRIPTIONS = {
     taxes: 'Estimaciones fiscales rápidas para inversiones, dividendos y plusvalías.',
 };
 
+// Mitigación temporal: evita que un SW antiguo deje la web en bucle de recarga.
+const PWA_ENABLED = false;
+
 function getBasePrefix() {
     return window.location.pathname.includes('/calculadoras/') ? '../' : '';
 }
@@ -44,6 +47,19 @@ function buildUrl(path) {
 
 function registerPwaServiceWorker() {
     if (!('serviceWorker' in navigator)) return;
+
+    if (!PWA_ENABLED) {
+        window.addEventListener('load', async () => {
+            try {
+                const registrations = await navigator.serviceWorker.getRegistrations();
+                await Promise.all(registrations.map((registration) => registration.unregister()));
+            } catch (error) {
+                console.warn('No se pudieron limpiar service workers antiguos:', error);
+            }
+        });
+        return;
+    }
+
     if (!window.isSecureContext && window.location.hostname !== 'localhost') return;
 
     window.addEventListener('load', async () => {
@@ -1814,29 +1830,11 @@ function renderCard(calc) {
     </article>`;
 }
 
-function renderHomeCategoryPreview() {
-    const host = document.getElementById('homeCategoriesPreview');
-    if (!host) return;
-
-    const counts = getCategoryCounts();
-    host.innerHTML = Object.entries(CATEGORY_LABELS)
-        .map(([key, label]) => `
-            <article class="result-box category-preview-card">
-                <div class="result-label">${counts[key] || 0} calculadoras</div>
-                <div class="result-value category-preview-title">${label}</div>
-                <p class="category-preview-text">${CATEGORY_DESCRIPTIONS[key]}</p>
-                <a class="btn-secondary calculator-back-link" href="calculadoras/index.html?category=${encodeURIComponent(key)}">Ver categoría</a>
-            </article>
-        `)
-        .join('');
-}
-
 function renderHomeShowcase() {
     const grid = document.getElementById('homeFeaturedGrid');
     if (!grid) return false;
 
     grid.innerHTML = getFeaturedCalculators().map(renderCard).join('');
-    renderHomeCategoryPreview();
     return true;
 }
 

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'zyvola-static-v2';
+const CACHE_NAME = 'zyvola-static-v3';
 const OFFLINE_PAGE = '/offline.html';
 const PRECACHE_URLS = [
     '/',
