@@ -61,9 +61,19 @@
             ]
         }
         </script>
-        <meta name="google-adsense-account" content="ca-pub-1005185185634508">
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1005185185634508"
-     crossorigin="anonymous"></script>
+
+    <!-- Google Adsense: Solo en producción (https) para evitar issues en desarrollo -->
+    <script>
+        if (window.location.protocol === 'https:') {
+            var script = document.createElement('script');
+            script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
+            script.async = true;
+            script.onerror = function() {
+                console.log('Adsense no pudo cargar (normal en desarrollo)');
+            };
+            document.head.appendChild(script);
+        }
+    </script>
 </head>
 <body>
     <!-- ═══════════════════════════════════════════════════════════════
@@ -112,18 +122,88 @@
             <!-- Home: muestra solo una selección reducida para evitar scroll infinito -->
             <div class="home-showcase-shell">
                 <div class="home-showcase-head">
-                    <h3 class="feature-title">Calculadoras destacadas</h3>
-                    <p class="feature-text">Una vista rápida con las herramientas más representativas de cada categoría.</p>
+                    <h3 class="feature-title home-subsection-title">Calculadoras destacadas</h3>
+                    <p class="feature-text home-subsection-text">Una vista rápida con las herramientas más representativas de cada categoría.</p>
                 </div>
-                <div id="homeFeaturedGrid" class="cards-grid" aria-live="polite"></div>
+                <div id="homeFeaturedGrid" class="cards-grid" aria-live="polite">
+                    <article class="premium-card premium-card--investment premium-card--highlighted" data-calc="compound-interest">
+                        <div class="card-content">
+                            <h3 class="card-title">Interés compuesto</h3>
+                            <p class="card-description">Calcula el crecimiento de tu capital con reinversión de intereses.</p>
+                            <a class="btn-secondary calculator-back-link" href="calculator.html?calc=compound-interest">Abrir calculadora</a>
+                        </div>
+                    </article>
+
+                    <article class="premium-card premium-card--savings premium-card--highlighted" data-calc="monthly-contribution-needed">
+                        <div class="card-content">
+                            <h3 class="card-title">Aportación mensual necesaria</h3>
+                            <p class="card-description">Cuánto necesitas aportar cada mes para alcanzar un objetivo.</p>
+                            <a class="btn-secondary calculator-back-link" href="calculator.html?calc=monthly-contribution-needed">Abrir calculadora</a>
+                        </div>
+                    </article>
+
+                    <article class="premium-card premium-card--loans" data-calc="fixed-mortgage">
+                        <div class="card-content">
+                            <h3 class="card-title">Hipoteca fija</h3>
+                            <p class="card-description">Simula cuota constante para una hipoteca a tipo fijo.</p>
+                            <a class="btn-secondary calculator-back-link" href="calculator.html?calc=fixed-mortgage">Abrir calculadora</a>
+                        </div>
+                    </article>
+
+                    <article class="premium-card premium-card--real-estate" data-calc="buy-vs-rent">
+                        <div class="card-content">
+                            <h3 class="card-title">Comprar vs alquilar</h3>
+                            <p class="card-description">Compara coste acumulado entre comprar y alquilar.</p>
+                            <a class="btn-secondary calculator-back-link" href="calculator.html?calc=buy-vs-rent">Abrir calculadora</a>
+                        </div>
+                    </article>
+
+                    <article class="premium-card premium-card--taxes" data-calc="irpf-investments">
+                        <div class="card-content">
+                            <h3 class="card-title">IRPF sobre inversiones</h3>
+                            <p class="card-description">Estimación de IRPF por ganancias del ahorro en tramos.</p>
+                            <a class="btn-secondary calculator-back-link" href="calculator.html?calc=irpf-investments">Abrir calculadora</a>
+                        </div>
+                    </article>
+                </div>
             </div>
 
             <div class="home-showcase-shell">
                 <div class="home-showcase-head">
-                    <h3 id="home-categories-title" class="feature-title">Explora por categoría</h3>
-                    <p class="feature-text">Accede al HUB principal para ver el catálogo completo, buscar y filtrar con más precisión.</p>
+                    <h3 id="home-categories-title" class="feature-title home-subsection-title">Explora por categoría</h3>
+                    <p class="feature-text home-subsection-text">Accede al HUB principal para ver el catálogo completo, buscar y filtrar con más precisión.</p>
                 </div>
-                <div id="homeCategoriesPreview" class="category-preview-grid" aria-labelledby="home-categories-title"></div>
+                <div id="homeCategoriesPreview" class="category-preview-grid" aria-labelledby="home-categories-title">
+                    <article class="result-box category-preview-card">
+                        <div class="result-value category-preview-title">Inversión</div>
+                        <p class="category-preview-text">Proyecciones de rentabilidad, inflación, carteras y métricas de inversión.</p>
+                        <a class="btn-secondary calculator-back-link" href="calculadoras/index.html?category=investment">Ver categoría</a>
+                    </article>
+
+                    <article class="result-box category-preview-card">
+                        <div class="result-value category-preview-title">Ahorros</div>
+                        <p class="category-preview-text">Metas de ahorro, aportaciones periódicas y planificación financiera personal.</p>
+                        <a class="btn-secondary calculator-back-link" href="calculadoras/index.html?category=savings">Ver categoría</a>
+                    </article>
+
+                    <article class="result-box category-preview-card">
+                        <div class="result-value category-preview-title">Préstamos</div>
+                        <p class="category-preview-text">Préstamos, hipotecas, amortizaciones y comparativas de financiación.</p>
+                        <a class="btn-secondary calculator-back-link" href="calculadoras/index.html?category=loans">Ver categoría</a>
+                    </article>
+
+                    <article class="result-box category-preview-card">
+                        <div class="result-value category-preview-title">Inmuebles</div>
+                        <p class="category-preview-text">Análisis de rentabilidad inmobiliaria, cashflow y compra frente a alquiler.</p>
+                        <a class="btn-secondary calculator-back-link" href="calculadoras/index.html?category=real-estate">Ver categoría</a>
+                    </article>
+
+                    <article class="result-box category-preview-card">
+                        <div class="result-value category-preview-title">Impuestos</div>
+                        <p class="category-preview-text">Estimaciones fiscales rápidas para inversiones, dividendos y plusvalías.</p>
+                        <a class="btn-secondary calculator-back-link" href="calculadoras/index.html?category=taxes">Ver categoría</a>
+                    </article>
+                </div>
             </div>
 
             <div class="button-group home-showcase-actions">
